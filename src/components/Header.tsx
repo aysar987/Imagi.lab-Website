@@ -5,6 +5,8 @@ interface HeaderProps {
   activeSection: string;
 }
 
+
+
 export function Header({ activeSection }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -16,6 +18,7 @@ export function Header({ activeSection }: HeaderProps) {
     }
   };
 
+  
   const navItems = [
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
@@ -24,7 +27,9 @@ export function Header({ activeSection }: HeaderProps) {
     { id: 'faq', label: 'FAQ' },
     { id: 'social', label: 'Social Media' },
   ];
-
+  
+  
+  
   return (
     <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-auto max-w-5xl">
       <nav className="backdrop-blur-md bg-[#40BFE5]/10 border-2 border-[#40BFE5]/40 rounded-[30px] shadow-2xl px-8 py-3.5">
