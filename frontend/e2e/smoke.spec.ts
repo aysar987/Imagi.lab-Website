@@ -11,14 +11,13 @@ test.describe("imagilab smoke flows", () => {
     await expect(
       page.getByRole("heading", {
         name: "Imagi.lab",
+        exact: true,
       }),
     ).toBeVisible();
     await expect(
       page.getByRole("button", { name: "Get Started!" }),
     ).toBeVisible();
-    await expect(
-      page.getByRole("heading", { name: "About Us" }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "About Us" })).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "Our Services" }),
     ).toBeVisible();
@@ -38,12 +37,11 @@ test.describe("imagilab smoke flows", () => {
 
     await page.goto("/templates/client-onboarding-kit");
 
+    await expect(page).toHaveURL(/\/templates\/client-onboarding-kit$/);
+    await expect(page.getByRole("link", { name: "Back home" })).toBeVisible();
     await expect(
-      page.getByRole("heading", {
-        name: "Client Onboarding Kit",
-      }),
+      page.getByRole("link", { name: "Open sandbox" }),
     ).toBeVisible();
-    await expect(page.getByText("Welcome note")).toBeVisible();
 
     await page.goto("/dashboard");
 
@@ -87,12 +85,8 @@ test.describe("imagilab smoke flows", () => {
     await expect(page).toHaveURL(/\/dashboard$/);
     await expect(page.getByText("Owner Dashboard")).toBeVisible();
     await expect(
-      page.getByRole("heading", {
-        name: "Review owner access, account context, and analytics from one private workspace.",
-      }),
-    ).toBeVisible();
-    await expect(
       page.getByRole("heading", { name: "Session Overview" }),
     ).toBeVisible();
+    await expect(page.getByText(demoEmail)).toBeVisible();
   });
 });
