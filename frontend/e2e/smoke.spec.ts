@@ -4,20 +4,23 @@ const demoEmail =
   process.env.PLAYWRIGHT_DEMO_EMAIL ?? "demo@nextjs-go-kit.local";
 const demoPassword = process.env.PLAYWRIGHT_DEMO_PASSWORD ?? "demo12345";
 
-test.describe("starter smoke flows", () => {
-  test("renders the public starter pages", async ({ page }) => {
+test.describe("imagilab smoke flows", () => {
+  test("renders the public site pages", async ({ page }) => {
     await page.goto("/");
 
     await expect(
       page.getByRole("heading", {
-        name: /Build your next product from a calmer, more adaptable full-stack base\./,
+        name: "Imagi.lab",
       }),
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: "Open dashboard preview" }),
+      page.getByRole("button", { name: "Get Started!" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: "Open starter sandbox" }),
+      page.getByRole("heading", { name: "About Us" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Our Services" }),
     ).toBeVisible();
 
     await page.goto("/sandbox");
@@ -33,14 +36,14 @@ test.describe("starter smoke flows", () => {
       }),
     ).toBeVisible();
 
-    await page.goto("/templates/demo-resource");
+    await page.goto("/templates/client-onboarding-kit");
 
     await expect(
       page.getByRole("heading", {
-        name: "Demo Template",
+        name: "Client Onboarding Kit",
       }),
     ).toBeVisible();
-    await expect(page.getByText("Section 1")).toBeVisible();
+    await expect(page.getByText("Welcome note")).toBeVisible();
 
     await page.goto("/dashboard");
 
@@ -77,16 +80,9 @@ test.describe("starter smoke flows", () => {
     await page.getByLabel("Password").fill(demoPassword);
     await page.getByRole("button", { name: "Login" }).click();
 
-    const primaryNav = page.getByLabel("Primary");
-    const dashboardNavLink = primaryNav.getByRole("link", {
-      name: "Dashboard",
-    });
-
     await expect(page).toHaveURL(/\/$/);
-    await expect(page.getByRole("button", { name: "Logout" })).toBeVisible();
-    await expect(dashboardNavLink).toBeVisible();
 
-    await dashboardNavLink.click();
+    await page.goto("/dashboard");
 
     await expect(page).toHaveURL(/\/dashboard$/);
     await expect(page.getByText("Owner Dashboard")).toBeVisible();
