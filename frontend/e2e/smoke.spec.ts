@@ -14,12 +14,14 @@ test.describe("imagilab smoke flows", () => {
         exact: true,
       }),
     ).toBeVisible();
+    await expect(page.getByRole("link", { name: "Get Started" })).toBeVisible();
     await expect(
-      page.getByRole("button", { name: "Get Started!" }),
+      page.getByText(
+        "Tim digital kreatif yang menghadirkan solusi digital, mulai dari desain dan video hingga pengembangan perangkat lunak",
+      ),
     ).toBeVisible();
-    await expect(page.getByRole("heading", { name: "About Us" })).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "Our Services" }),
+      page.getByRole("heading", { name: "Our Service" }),
     ).toBeVisible();
 
     await page.goto("/sandbox");
