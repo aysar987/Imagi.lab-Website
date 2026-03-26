@@ -1,592 +1,431 @@
-"use client";
-
 import Image from "next/image";
-import { type ReactNode, useEffect, useState } from "react";
-import {
-  Award,
-  Boxes,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  Code,
-  DollarSign,
-  Handshake,
-  Instagram,
-  Linkedin,
-  Menu,
-  MessageCircle,
-  Palette,
-  Rocket,
-  Users,
-  X,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Box, Clapperboard, Code2, PenTool } from "lucide-react";
 
-const navItems = [
-  { id: "home", label: "Home" },
-  { id: "about", label: "About" },
-  { id: "services", label: "Services" },
-  { id: "clients", label: "Projects" },
-  { id: "faq", label: "FAQ" },
-  { id: "social", label: "Social Media" },
+const navigationItems = [
+  { href: "#home", label: "Home", active: true },
+  { href: "#about", label: "About" },
+  { href: "#services", label: "Service" },
+  { href: "#projects", label: "Projects" },
 ];
 
-const reasons = [
+const serviceItems = [
+  { label: "Software Dev", Icon: Code2 },
+  { label: "Designing", Icon: PenTool },
+  { label: "Video Editing", Icon: Clapperboard },
+  { label: "3D Designing", Icon: Box },
+];
+
+const projectItems = [
   {
-    Icon: Users,
-    title: "Profesional Developers",
-    description:
-      "Tim kami terdiri dari mahasiswa berpengalaman di bidang Teknologi Informasi dan Desain Digital dari Universitas Hasanuddin (UNHAS) dan Institut Teknologi Sepuluh Nopember (ITS). Kami menggabungkan kreativitas dan keahlian teknis untuk menghasilkan karya yang fungsional sekaligus estetis.",
+    title: "Nama Project",
+    description: "Lorem ipsum dolor sit amet",
+    date: "12-12-2026",
+    accent: "bg-[linear-gradient(135deg,#cfb7a4_0%,#f2e8dc_38%,#ad8a72_100%)]",
   },
   {
-    Icon: DollarSign,
-    title: "Harga Fleksibel",
-    description:
-      "Kami memahami setiap proyek punya kebutuhan dan budget berbeda. Karena itu, biaya pengerjaan dapat disesuaikan dan kami terbuka untuk negosiasi agar tetap ramah di kantong tanpa mengorbankan kualitas.",
+    title: "Nama Project",
+    description: "Lorem ipsum dolor sit amet",
+    date: "12-12-2026",
+    accent: "bg-[linear-gradient(135deg,#d7c1b0_0%,#f4ebdf_40%,#b49377_100%)]",
   },
   {
-    Icon: Boxes,
-    title: "Adaptive Handling",
-    description:
-      "Tidak perlu memesan full project jika kamu hanya butuh bantuan di satu bagian saja, misalnya frontend, desain UI/UX, atau editing konten. Kami siap bantu sesuai kebutuhan spesifik proyekmu.",
+    title: "Nama Project",
+    description: "Lorem ipsum dolor sit amet",
+    date: "12-12-2026",
+    accent: "bg-[linear-gradient(135deg,#ceb7a8_0%,#f0e8dd_36%,#9f7d66_100%)]",
   },
   {
-    Icon: Award,
-    title: "Kualitas Terjamin",
-    description:
-      "Kami berkomitmen memberikan hasil terbaik di setiap proyek. imaji.lab menyediakan layanan revisi agar hasil akhir benar-benar sesuai dengan ekspektasimu.",
+    title: "Nama Project",
+    description: "Lorem ipsum dolor sit amet",
+    date: "12-12-2026",
+    accent: "bg-[linear-gradient(135deg,#d8c2af_0%,#f4ebdf_42%,#ac896e_100%)]",
   },
   {
-    Icon: Handshake,
-    title: "Profesional, Komunikatif, & Bertanggung Jawab",
-    description:
-      "Selama proses pengerjaan, kami menjaga komunikasi aktif dengan klien dan memastikan setiap tahapan berjalan transparan. Kami tidak hanya menyelesaikan proyek, kami membangun kepercayaan dan kepuasan klien.",
+    title: "Nama Project",
+    description: "Lorem ipsum dolor sit amet",
+    date: "12-12-2026",
+    accent: "bg-[linear-gradient(135deg,#d4bfac_0%,#f3eadf_38%,#a8866d_100%)]",
   },
 ];
 
-const services = [
-  {
-    Icon: Code,
-    title: "Web Development",
-    description:
-      "Kami merancang dan membangun website serta aplikasi yang modern, responsif, dan mudah digunakan, dirancang untuk menghadirkan pengalaman pengguna terbaik.",
-  },
-  {
-    Icon: Palette,
-    title: "Design",
-    description:
-      "Mulai dari desain feeds Instagram, branding, hingga interface software, kami menciptakan desain visual yang estetik, konsisten, dan selaras dengan identitas Anda.",
-  },
-  {
-    Icon: Rocket,
-    title: "Editings",
-    description:
-      "Kami mengubah ide Anda menjadi karya visual yang menarik dan profesional, baik untuk kebutuhan promosi, konten media sosial, maupun presentasi bisnis.",
-  },
-];
-
-const projects = [
-  {
-    name: "Flippy",
-    description:
-      "Kami merancang website belajar dengan metode interaktif dan menyenangkan, dirancang untuk membuat proses pembelajaran lebih efektif, mudah dipahami, dan tidak membosankan.",
-    image: "/imagilab/project-flippy.png",
-  },
-  {
-    name: "PhishScan",
-    description:
-      "Dalam rangka hackathon, tim kami membuat sebuah web AI yang berfungsi untuk mendeteksi link atau web phishing.",
-    image: "/imagilab/project-phishscan.png",
-  },
-  {
-    name: "Logo PKKMB FT UH 2025",
-    description:
-      "Anggota tim kami mengambil bagian untuk mendesain logo PKKMB Fakultas Teknik tahun 2025.",
-    image: "/imagilab/project-pkkmb.png",
-  },
-  {
-    name: "Logo ICC UH",
-    description:
-      "Anggota tim kami mendesain logo dari tim cybersecurity Universitas Hasanuddin.",
-    image: "/imagilab/project-icc.png",
-  },
-];
-
-const faqs = [
-  {
-    question: "Apa jasa yang ditawarkan?",
-    answer:
-      "Kami mengubah ide Anda menjadi karya digital yang menarik dan profesional, mulai dari pembuatan website, desain visual, hingga editing konten untuk kebutuhan bisnis maupun personal.",
-  },
-  {
-    question: "Berapa lama satu project website dikerjakan?",
-    answer:
-      "Waktu pengerjaan proyek bervariasi tergantung pada cakupan dan tingkat kompleksitasnya. Sebuah website sederhana biasanya memakan waktu sekitar 4 sampai 5 hari, sedangkan aplikasi web yang lebih kompleks dapat memakan waktu 2 sampai 3 pekan.",
-  },
-  {
-    question: "Bagaimana proses pelayanannya?",
-    answer:
-      "Proses pelayanan kami dimulai dari diskusi kebutuhan dan tujuan proyek. Setelah itu, kami membuat konsep dan perencanaan detail, termasuk desain awal dan jadwal pengerjaan. Selama proses berlangsung, kami selalu berkomunikasi secara rutin untuk memastikan hasil sesuai harapan.",
-  },
-  {
-    question: "Apakah Anda menyediakan dukungan setelah proyek selesai?",
-    answer:
-      "Ya, kami menyediakan layanan dukungan dan pemeliharaan berkelanjutan dalam rentang 6 bulan untuk memastikan hasil proyek Anda tetap optimal. Layanan ini mencakup pembaruan sistem, perbaikan bug, penyesuaian desain, serta pengembangan fitur tambahan sesuai kebutuhan Anda.",
-  },
-  {
-    question: "Bagaimana penentuan biaya untuk setiap proyek?",
-    answer:
-      "Harga proyek kami disesuaikan berdasarkan tingkat kesulitan, kompleksitas, serta kebutuhan spesifik setiap klien. Kami akan memberikan estimasi biaya yang transparan setelah memahami detail proyek dan ruang lingkup pekerjaannya.",
-  },
-];
-
-const socialLinks = [
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/imagilab.id/",
-    Icon: Instagram,
-  },
-  {
-    label: "WhatsApp",
-    href: "#",
-    Icon: MessageCircle,
-  },
+const footerLinks = [
+  { label: "Discord", href: "#", src: "/Footer/Footer-Discord.png" },
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/company/109692058/",
-    Icon: Linkedin,
+    src: "/Footer/Footer-Linkedin.png",
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/imagilab.id/",
+    src: "/Footer/Footer-Instagram.png",
   },
 ];
 
-function SectionTitle({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return (
-    <h2
-      className={cn(
-        "mb-8 text-center text-5xl text-[#40BFE5] md:text-6xl",
-        className,
-      )}
-      style={{ fontFamily: "var(--font-imagilab)", fontWeight: 500 }}
-    >
-      {children}
-    </h2>
-  );
-}
-
 export function ImagilabHomePage() {
-  const [activeSection, setActiveSection] = useState("home");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeProject, setActiveProject] = useState(0);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = [
-        "home",
-        "about",
-        "why",
-        "services",
-        "clients",
-        "faq",
-        "social",
-      ];
-      const scrollPosition = window.scrollY + 200;
-
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (!element) {
-          continue;
-        }
-
-        const { offsetTop, offsetHeight } = element;
-        if (
-          scrollPosition >= offsetTop &&
-          scrollPosition < offsetTop + offsetHeight
-        ) {
-          setActiveSection(section);
-          break;
-        }
-      }
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const autoScroll = window.setInterval(() => {
-      setActiveProject((current) => (current + 1) % projects.length);
-    }, 3000);
-
-    return () => window.clearInterval(autoScroll);
-  }, []);
-
-  function scrollToSection(sectionId: string) {
-    const element = document.getElementById(sectionId);
-    if (!element) {
-      return;
-    }
-
-    element.scrollIntoView({ behavior: "smooth" });
-    setMobileMenuOpen(false);
-  }
-
-  function showPreviousProject() {
-    setActiveProject(
-      (current) => (current - 1 + projects.length) % projects.length,
-    );
-  }
-
-  function showNextProject() {
-    setActiveProject((current) => (current + 1) % projects.length);
-  }
-
-  const orderedProjects = projects.map(
-    (_, offset) => projects[(activeProject + offset) % projects.length],
-  );
   const currentYear = new Date().getFullYear();
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-black">
-      <div className="pointer-events-none fixed inset-0 z-0">
-        <div className="absolute top-[10%] left-[15%] h-96 w-96 rounded-full bg-[#40BFE5] opacity-20 blur-[120px]" />
-        <div className="absolute top-[40%] right-[10%] h-80 w-80 rounded-full bg-blue-500 opacity-15 blur-[100px]" />
-        <div className="absolute bottom-[20%] left-[25%] h-72 w-72 rounded-full bg-cyan-400 opacity-25 blur-[90px]" />
-        <div className="absolute top-[60%] right-[30%] h-64 w-64 rounded-full bg-[#40BFE5] opacity-10 blur-[80px]" />
-        <div className="absolute bottom-[40%] left-[5%] h-56 w-56 rounded-full bg-blue-600 opacity-15 blur-[70px]" />
-        <div className="absolute top-[25%] right-[45%] h-48 w-48 rounded-full bg-cyan-300 opacity-20 blur-[60px]" />
-      </div>
+    <main className="relative overflow-x-clip bg-[#040404] text-white">
+      <div aria-hidden className="fixed inset-0 -z-20 bg-[#040404]" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[#040404]"
+      />
 
-      <div className="relative z-10">
-        <header className="fixed top-6 left-1/2 z-50 w-auto max-w-5xl -translate-x-1/2">
-          <nav className="rounded-[30px] border-2 border-[#40BFE5]/40 bg-[#40BFE5]/10 px-8 py-3.5 shadow-2xl backdrop-blur-md">
-            <div className="flex items-center justify-center">
-              <ul className="hidden items-center gap-6 text-base md:flex">
-                {navItems.map((item) => (
-                  <li key={item.id}>
-                    <button
-                      type="button"
-                      onClick={() => scrollToSection(item.id)}
-                      className={cn(
-                        "transition-all hover:text-[#40BFE5] hover:drop-shadow-[0_0_8px_rgba(64,191,229,0.6)]",
-                        activeSection === item.id
-                          ? "text-[#40BFE5] drop-shadow-[0_0_8px_rgba(64,191,229,0.6)]"
-                          : "text-white",
-                      )}
-                    >
-                      {item.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+      <header className="fixed top-7 left-1/2 z-30 w-fit max-w-[calc(100%-2rem)] -translate-x-1/2">
+        <nav
+          aria-label="Primary"
+          className="content-appear rounded-[1.15rem] border border-[#14bff2]/75 bg-[#050505] px-6 py-3 shadow-[0_0_0_1px_rgba(20,191,242,0.04)] sm:px-9"
+        >
+          <ul className="flex items-center gap-5 text-sm font-medium sm:gap-11 sm:text-[1.05rem]">
+            {navigationItems.map((item) => (
+              <li key={item.label}>
+                <a
+                  href={item.href}
+                  aria-current={item.active ? "page" : undefined}
+                  className={[
+                    "transition-colors duration-300",
+                    item.active
+                      ? "text-[#14bff2]"
+                      : "text-white hover:text-[#14bff2]",
+                  ].join(" ")}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </header>
 
-              <button
-                type="button"
-                className="text-white transition-all hover:text-[#40BFE5] hover:drop-shadow-[0_0_8px_rgba(64,191,229,0.6)] md:hidden"
-                onClick={() => setMobileMenuOpen((open) => !open)}
-                aria-label="Toggle navigation"
-              >
-                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
+      <div className="relative bg-[#040404]">
+        <section
+          id="home"
+          className="relative flex min-h-[46rem] w-full flex-col overflow-visible pt-28 pb-2 lg:min-h-[50rem] lg:pb-0"
+        >
+          <div className="relative flex min-h-[38rem] flex-1 items-center pb-8 lg:min-h-[41rem] lg:pb-8">
+            <Image
+              src="/imagilab/hero-logo.png"
+              alt=""
+              aria-hidden
+              width={1400}
+              height={1400}
+              priority
+              sizes="100vw"
+              className="hero-art-appear pointer-events-none absolute top-[8.5rem] right-[-36%] z-0 w-[108vw] max-w-none opacity-[0.34] blur-[2px] lg:hidden"
+            />
 
-            {mobileMenuOpen ? (
-              <ul className="mt-4 space-y-3 border-t border-white/20 pt-4 md:hidden">
-                {navItems.map((item) => (
-                  <li key={item.id}>
-                    <button
-                      type="button"
-                      onClick={() => scrollToSection(item.id)}
-                      className={cn(
-                        "block w-full text-left transition-all hover:text-[#40BFE5] hover:drop-shadow-[0_0_8px_rgba(64,191,229,0.6)]",
-                        activeSection === item.id
-                          ? "text-[#40BFE5] drop-shadow-[0_0_8px_rgba(64,191,229,0.6)]"
-                          : "text-white",
-                      )}
-                    >
-                      {item.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </nav>
-        </header>
+            <Image
+              src="/imagilab/hero-logo.png"
+              alt=""
+              aria-hidden
+              width={1400}
+              height={1400}
+              priority
+              sizes="52vw"
+              className="hero-art-appear pointer-events-none absolute top-[1rem] right-[2.5%] z-0 hidden w-[clamp(33rem,42vw,47rem)] max-w-none opacity-[0.82] blur-[2.6px] drop-shadow-[0_0_18px_rgba(24,194,243,0.25)] lg:block"
+            />
 
-        <main>
-          <section
-            id="home"
-            className="relative flex min-h-screen items-center justify-center bg-gradient-to-b from-black via-black to-[#40BFE5]/10 px-6"
-          >
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-50">
-              <Image
-                src="/imagilab/hero-logo.png"
-                alt=""
-                width={600}
-                height={600}
-                className="h-[600px] w-[600px] object-contain"
-              />
-            </div>
+            <Image
+              src="/imagilab/Hero-Star2.png"
+              alt=""
+              aria-hidden
+              width={700}
+              height={700}
+              sizes="(max-width: 639px) 42vw, 24vw"
+              className="hero-art-appear pointer-events-none absolute bottom-[-2.5rem] left-[-22%] z-0 w-[48vw] max-w-[19rem] opacity-[0.96] drop-shadow-[0_0_40px_rgba(20,191,242,0.5)] sm:left-[-12%] sm:w-[24vw] lg:bottom-[-3.25rem] lg:left-[-9%]"
+            />
 
-            <div className="relative z-10 max-w-4xl text-center">
+            <Image
+              src="/imagilab/Hero-Star.png"
+              alt=""
+              aria-hidden
+              width={700}
+              height={700}
+              sizes="(max-width: 639px) 36vw, 18vw"
+              className="hero-art-appear pointer-events-none absolute right-[-16%] bottom-[-2rem] z-0 w-[39vw] max-w-[15rem] opacity-[0.96] drop-shadow-[0_0_40px_rgba(20,191,242,0.5)] sm:right-[-8%] sm:w-[18vw] lg:right-[-6%] lg:bottom-[-5rem]"
+            />
+
+            <div
+              id="about"
+              className="relative z-10 max-w-[38rem] scroll-mt-36 pt-10 pr-5 pl-[clamp(1.5rem,7vw,6.5rem)] sm:pt-12 sm:pr-8 lg:pt-0"
+            >
               <h1
-                className="mb-6 text-7xl text-white md:text-9xl"
+                className="content-appear content-appear--delay-1 text-[clamp(4rem,7vw,5.6rem)] leading-[0.92] tracking-[-0.075em] text-[#18c2f3]"
                 style={{ fontFamily: "var(--font-imagilab)", fontWeight: 500 }}
               >
                 Imagi.lab
               </h1>
-              <p
-                className="mb-12 text-xl text-gray-300 md:text-2xl"
-                style={{ fontFamily: "var(--font-imagilab)", fontWeight: 500 }}
-              >
-                Butuh website atau butuh sebuah desain?
-                <br />
-                <span className="text-[#40BFE5]">imaji.lab</span> solusinya
+
+              <p className="content-appear content-appear--delay-2 mt-7 max-w-[37rem] text-[clamp(1.15rem,1.65vw,1.6rem)] leading-[1.6] text-white/92">
+                Tim digital kreatif yang menghadirkan solusi digital, mulai dari
+                desain dan video hingga pengembangan perangkat lunak
               </p>
 
-              <button
-                type="button"
-                onClick={() =>
-                  window.open(
-                    "https://forms.gle/VhuVBqoZxmCNVFdS6",
-                    "_blank",
-                    "noopener,noreferrer",
-                  )
-                }
-                className="rounded-[30px] border-2 border-[#40BFE5]/60 bg-[#40BFE5]/20 px-8 py-2 text-lg font-bold tracking-wide text-[#40BFE5] uppercase transition-all hover:scale-105 hover:bg-[#40BFE5]/30 hover:drop-shadow-[0_0_12px_rgba(64,191,229,0.8)]"
-                style={{ fontFamily: "var(--font-imagilab)" }}
-              >
-                Get Started!
-              </button>
-            </div>
-          </section>
-
-          <section
-            id="about"
-            className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-6"
-          >
-            <div className="relative z-10 max-w-4xl text-center">
-              <SectionTitle>About Us</SectionTitle>
-              <div className="space-y-6 text-xl text-gray-300">
-                <p>
-                  Imaji.lab adalah tim kreatif dan teknologi yang berfokus
-                  menghadirkan solusi digital.
-                </p>
-                <p>
-                  Mulai dari desain grafis, video editing, hingga pengembangan
-                  website dan software, kami membantu individu maupun bisnis
-                  dalam menyelesaikan kebutuhan digital yang kuat dan menarik.
-                </p>
-                <p>
-                  Dengan pendekatan kolaboratif dan efisien, setiap ide memiliki
-                  potensi besar untuk diwujudkan melalui sentuhan teknologi dan
-                  kreativitas.
-                </p>
+              <div className="content-appear content-appear--delay-3 mt-7">
+                <a
+                  href="https://forms.gle/VhuVBqoZxmCNVFdS6"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex min-w-[12.8rem] items-center justify-center rounded-[0.9rem] bg-[#22bced] px-8 py-3 text-[1rem] font-bold text-black shadow-[0_10px_20px_rgba(24,194,243,0.16)] transition-colors duration-300 hover:bg-[#39c8f3]"
+                >
+                  Get Started
+                </a>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <section
-            id="why"
-            className="flex min-h-screen items-center justify-center px-6 py-6"
-          >
-            <div className="w-full max-w-7xl">
-              <SectionTitle className="mb-16">Why Imagi.lab?</SectionTitle>
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {reasons.map(({ Icon, title, description }) => (
-                  <div
-                    key={title}
-                    className="group relative rounded-3xl border-2 border-[#40BFE5]/20 bg-gradient-to-br from-white/10 to-white/5 p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[#40BFE5]/60"
-                  >
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[#40BFE5]/0 to-[#40BFE5]/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                    <div className="relative z-10">
-                      <div className="mb-6 text-[#40BFE5] transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_12px_rgba(64,191,229,0.8)]">
-                        <Icon size={48} />
-                      </div>
-                      <h3 className="mb-4 text-2xl text-white transition-colors duration-300 group-hover:text-[#40BFE5]">
-                        {title}
-                      </h3>
-                      <p className="text-gray-300 transition-colors duration-300 group-hover:text-gray-200">
-                        {description}
-                      </p>
-                    </div>
+        <section id="services" className="relative scroll-mt-28 pt-0 pb-28">
+          <div className="w-full px-5 sm:px-8 lg:px-10">
+            <h2 className="content-appear content-appear--delay-4 text-center font-[family-name:var(--font-display)] text-[clamp(3.2rem,6vw,5.2rem)] font-bold tracking-[-0.07em] text-white">
+              Our Service
+            </h2>
+
+            <div className="mx-auto mt-12 grid max-w-[1120px] grid-cols-1 gap-7 sm:grid-cols-2 lg:mt-10 lg:grid-cols-4 lg:gap-8">
+              {serviceItems.map(({ label, Icon }, index) => (
+                <article
+                  key={label}
+                  className={`content-appear flex h-[12.6rem] items-center justify-center rounded-[2px] bg-[#20bced] px-4 text-center shadow-[0_14px_34px_rgba(0,0,0,0.18)] ${
+                    index === 0
+                      ? "content-appear--delay-1"
+                      : index === 1
+                        ? "content-appear--delay-2"
+                        : index === 2
+                          ? "content-appear--delay-3"
+                          : "content-appear--delay-4"
+                  }`}
+                >
+                  <div className="flex flex-col items-center gap-7 text-black">
+                    <Icon className="h-14 w-14 stroke-[2.3]" />
+                    <h3 className="text-[clamp(1.5rem,2vw,2rem)] font-semibold tracking-[-0.05em]">
+                      {label}
+                    </h3>
                   </div>
-                ))}
-              </div>
+                </article>
+              ))}
             </div>
-          </section>
+          </div>
+        </section>
 
-          <section
-            id="services"
-            className="flex min-h-screen items-center justify-center px-6 py-6"
-          >
-            <div className="w-full max-w-7xl">
-              <SectionTitle className="mb-16">Our Services</SectionTitle>
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-                {services.map(({ Icon, title, description }) => (
+        <section
+          id="projects"
+          className="relative scroll-mt-28 overflow-hidden pt-20 pb-24 text-black lg:pt-[5.25rem]"
+        >
+          <Image
+            src="/Project/Project-Background.png"
+            alt=""
+            aria-hidden
+            fill
+            sizes="100vw"
+            className="pointer-events-none absolute inset-0 z-0 object-cover object-top"
+          />
+
+          <blockquote className="content-appear content-appear--delay-1 relative z-10 mx-auto max-w-[72rem] px-5 text-center text-[clamp(1.65rem,3vw,3rem)] font-bold tracking-[-0.06em] text-black sm:px-8 lg:mt-2 lg:px-10">
+            &quot;we create solution for your imagination&quot;
+          </blockquote>
+
+          <div className="content-appear content-appear--delay-2 relative z-10 mt-[4.5rem] flex justify-center px-5 sm:px-8 lg:mt-[5rem] lg:px-10">
+            <div className="inline-flex min-w-[15rem] items-center justify-center bg-black px-9 py-4">
+              <h2 className="text-[clamp(2rem,4vw,3rem)] font-bold tracking-[-0.06em] text-[#20bced]">
+                Projects
+              </h2>
+            </div>
+          </div>
+
+          <div className="relative z-10 mx-auto mt-[4.75rem] max-w-[1320px] lg:mt-[5.25rem]">
+            <div className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 lg:hidden">
+              {projectItems.map((project, index) => (
+                <article
+                  key={`${project.title}-mobile-${index}`}
+                  className={`content-appear w-[19rem] shrink-0 snap-center overflow-hidden rounded-[10px] bg-black shadow-[0_18px_36px_rgba(0,0,0,0.22)] ${
+                    index === 0
+                      ? "content-appear--delay-1"
+                      : index === 1
+                        ? "content-appear--delay-2"
+                        : index === 2
+                          ? "content-appear--delay-3"
+                          : "content-appear--delay-4"
+                  }`}
+                >
                   <div
-                    key={title}
-                    className="cursor-pointer rounded-2xl border border-[#40BFE5]/30 bg-white/5 p-8 transition-all hover:scale-105 hover:border-[#40BFE5] hover:bg-white/10 hover:drop-shadow-[0_0_16px_rgba(64,191,229,0.6)]"
+                    className={`relative h-44 overflow-hidden ${project.accent}`}
                   >
-                    <div className="mb-6 text-[#40BFE5]">
-                      <Icon size={48} />
-                    </div>
-                    <h3 className="mb-4 text-2xl text-white">{title}</h3>
-                    <p className="text-gray-300">{description}</p>
+                    <div className="absolute inset-x-[13%] top-5 h-14 rounded-t-full border-[10px] border-b-0 border-[#6cc5ff] opacity-95" />
+                    <div className="absolute inset-x-[9%] bottom-0 h-24 bg-[radial-gradient(circle_at_10%_30%,rgba(37,37,37,0.95)_0,rgba(37,37,37,0.95)_18px,transparent_19px),radial-gradient(circle_at_24%_38%,rgba(62,46,39,0.88)_0,rgba(62,46,39,0.88)_18px,transparent_19px),radial-gradient(circle_at_40%_29%,rgba(33,33,33,0.95)_0,rgba(33,33,33,0.95)_19px,transparent_20px),radial-gradient(circle_at_57%_34%,rgba(64,49,42,0.9)_0,rgba(64,49,42,0.9)_20px,transparent_21px),radial-gradient(circle_at_74%_30%,rgba(39,39,39,0.95)_0,rgba(39,39,39,0.95)_18px,transparent_19px),radial-gradient(circle_at_88%_36%,rgba(57,42,35,0.9)_0,rgba(57,42,35,0.9)_18px,transparent_19px)] opacity-95" />
+                    <div className="absolute inset-x-0 bottom-0 h-14 bg-[linear-gradient(180deg,transparent_0%,rgba(0,0,0,0.24)_100%)]" />
                   </div>
-                ))}
-              </div>
+
+                  <div className="space-y-2 px-4 pt-3 pb-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <h3 className="max-w-[10rem] text-[1.5rem] font-semibold tracking-[-0.06em] text-[#20bced]">
+                          {project.title}
+                        </h3>
+                      <span className="text-[0.72rem] font-medium text-white">
+                        {project.date}
+                      </span>
+                    </div>
+                    <p className="text-[0.98rem] text-white">
+                      {project.description}
+                    </p>
+                  </div>
+                </article>
+              ))}
             </div>
-          </section>
 
-          <section
-            id="clients"
-            className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-6"
-          >
-            <div className="relative z-10 w-full max-w-7xl">
-              <SectionTitle className="mb-16">Our Projects</SectionTitle>
-
-              <div className="relative px-4 md:px-8">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {orderedProjects.slice(0, 3).map((project, index) => (
-                    <article
-                      key={`${project.name}-${index}`}
-                      className={cn(
-                        "rounded-2xl border border-[#40BFE5]/20 bg-white/5 p-6 transition-all duration-500",
-                        index === 0
-                          ? "scale-100 opacity-100 hover:scale-105 hover:drop-shadow-[0_0_20px_rgba(64,191,229,0.6)]"
-                          : "scale-95 opacity-40 blur-sm",
-                        index > 0 && "hidden md:block",
-                        index > 1 && "md:hidden lg:block",
-                      )}
+            <div className="hidden overflow-visible pb-8 lg:block">
+              <div className="relative left-1/2 flex w-[calc(100vw+19rem)] -translate-x-1/2 items-start justify-between">
+                {projectItems.map((project, index) => (
+                  <article
+                    key={`${project.title}-${index}`}
+                    className={`content-appear overflow-hidden rounded-[10px] bg-black shadow-[0_18px_36px_rgba(0,0,0,0.22)] ${
+                      index === 0 || index === 4
+                        ? "mt-3 w-[18rem]"
+                      : index === 2
+                          ? "w-[19.75rem]"
+                          : "mt-2 w-[18rem]"
+                    } ${
+                      index === 0
+                        ? "content-appear--delay-1"
+                        : index === 1
+                          ? "content-appear--delay-2"
+                          : index === 2
+                            ? "content-appear--delay-3"
+                            : index === 3
+                              ? "content-appear--delay-4"
+                              : "content-appear--delay-4"
+                    }`}
                     >
-                      <div className="mb-4 aspect-video overflow-hidden rounded-lg border border-[#40BFE5]/10">
-                        <Image
-                          src={project.image}
-                          alt={project.name}
-                          width={1200}
-                          height={675}
-                          className="h-full w-full object-cover"
-                        />
+                      <div
+                        className={`relative overflow-hidden ${project.accent} ${
+                        index === 2 ? "h-[12.8rem]" : "h-[11.35rem]"
+                      }`}
+                    >
+                      <div className="absolute inset-x-[13%] top-5 h-14 rounded-t-full border-[10px] border-b-0 border-[#6cc5ff] opacity-95" />
+                      <div className="absolute inset-x-[9%] bottom-0 h-24 bg-[radial-gradient(circle_at_10%_30%,rgba(37,37,37,0.95)_0,rgba(37,37,37,0.95)_18px,transparent_19px),radial-gradient(circle_at_24%_38%,rgba(62,46,39,0.88)_0,rgba(62,46,39,0.88)_18px,transparent_19px),radial-gradient(circle_at_40%_29%,rgba(33,33,33,0.95)_0,rgba(33,33,33,0.95)_19px,transparent_20px),radial-gradient(circle_at_57%_34%,rgba(64,49,42,0.9)_0,rgba(64,49,42,0.9)_20px,transparent_21px),radial-gradient(circle_at_74%_30%,rgba(39,39,39,0.95)_0,rgba(39,39,39,0.95)_18px,transparent_19px),radial-gradient(circle_at_88%_36%,rgba(57,42,35,0.9)_0,rgba(57,42,35,0.9)_18px,transparent_19px)] opacity-95" />
+                      <div className="absolute inset-x-0 bottom-0 h-14 bg-[linear-gradient(180deg,transparent_0%,rgba(0,0,0,0.24)_100%)]" />
+                    </div>
+
+                    <div
+                      className={`space-y-2 px-4 pt-3 ${
+                        index === 2 ? "pb-5" : "pb-4"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <h3 className="max-w-[9rem] text-[1.5rem] font-semibold tracking-[-0.06em] text-[#20bced]">
+                          {project.title}
+                        </h3>
+                        <span className="text-[0.68rem] font-medium text-white">
+                          {project.date}
+                        </span>
                       </div>
-                      <h3 className="mb-2 text-xl text-[#40BFE5]">
-                        {project.name}
-                      </h3>
-                      <p className="text-sm text-gray-300">
+                      <p className="text-[0.98rem] text-white">
                         {project.description}
                       </p>
-                    </article>
-                  ))}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={showPreviousProject}
-                  className="absolute top-1/2 left-0 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-[#40BFE5] text-black transition-all hover:bg-[#40BFE5]/80 hover:drop-shadow-[0_0_12px_rgba(64,191,229,0.8)] md:-left-8"
-                  aria-label="Show previous project"
-                >
-                  <ChevronLeft className="h-5 w-5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={showNextProject}
-                  className="absolute top-1/2 right-0 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-[#40BFE5] text-black transition-all hover:bg-[#40BFE5]/80 hover:drop-shadow-[0_0_12px_rgba(64,191,229,0.8)] md:-right-8"
-                  aria-label="Show next project"
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
-          </section>
-
-          <section
-            id="faq"
-            className="flex min-h-screen items-center justify-center px-6 py-6"
-          >
-            <div className="w-full max-w-4xl">
-              <SectionTitle className="mb-16">FAQ</SectionTitle>
-              <div className="space-y-4">
-                {faqs.map((faq, index) => {
-                  const isOpen = openFaq === index;
-
-                  return (
-                    <div
-                      key={faq.question}
-                      className={cn(
-                        "rounded-lg border border-[#40BFE5]/30 bg-white/5 px-6 transition-all hover:drop-shadow-[0_0_12px_rgba(64,191,229,0.4)]",
-                        isOpen && "border-[#40BFE5]",
-                      )}
-                    >
-                      <button
-                        type="button"
-                        className="flex w-full items-center justify-between gap-4 py-5 text-left text-white transition-all hover:text-[#40BFE5] hover:drop-shadow-[0_0_8px_rgba(64,191,229,0.6)]"
-                        onClick={() =>
-                          setOpenFaq((current) =>
-                            current === index ? null : index,
-                          )
-                        }
-                        aria-expanded={isOpen}
-                      >
-                        <span>{faq.question}</span>
-                        <ChevronDown
-                          className={cn(
-                            "h-5 w-5 shrink-0 transition-transform",
-                            isOpen && "rotate-180",
-                          )}
-                        />
-                      </button>
-
-                      {isOpen ? (
-                        <div className="pb-5 text-gray-300">{faq.answer}</div>
-                      ) : null}
                     </div>
-                  );
-                })}
+                  </article>
+                ))}
               </div>
             </div>
-          </section>
 
-          <section id="social" className="px-6 py-6">
-            <div className="mx-auto max-w-4xl text-center">
-              <h2
-                className="mb-6 text-3xl text-[#40BFE5]"
+            <div className="mt-8 flex items-center justify-center gap-2.5">
+              <span className="h-3.5 w-3.5 rounded-full bg-black" />
+              <span className="h-3.5 w-3.5 rounded-full bg-black" />
+              <span className="h-3.5 w-3.5 rounded-full bg-[#0b6f8c]" />
+              <span className="h-3.5 w-3.5 rounded-full bg-black" />
+              <span className="h-3.5 w-3.5 rounded-full bg-black" />
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer className="relative bg-[#040404] pb-0">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/12" />
+
+        <div className="pointer-events-none absolute top-0 left-1/2 z-0 hidden -translate-x-1/2 -translate-y-[34%] lg:block">
+          <div className="relative">
+            <Image
+              src="/Footer/Footer-iBot.png"
+              alt=""
+              aria-hidden
+              width={460}
+              height={380}
+              className="w-[22rem]"
+            />
+            <span className="absolute right-[-6.25rem] bottom-[4.5rem] text-[3rem] font-semibold tracking-[-0.06em] text-white">
+              iBot
+            </span>
+          </div>
+        </div>
+
+        <div className="relative z-10 flex flex-col gap-10 px-6 pt-8 sm:px-8 lg:flex-row lg:items-start lg:justify-between lg:px-14">
+          <div className="pt-4">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/Footer/Footer-Logo.png"
+                alt="Imagilab logo"
+                width={48}
+                height={48}
+                className="h-10 w-10 object-contain"
+              />
+              <span
+                className="text-[2rem] leading-none text-white"
                 style={{
                   fontFamily: "var(--font-imagilab)",
                   fontWeight: 500,
                 }}
               >
-                Connect With Us
-              </h2>
-              <div className="mb-12 flex justify-center gap-4">
-                {socialLinks.map(({ label, href, Icon }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    aria-label={label}
-                    target={href.startsWith("http") ? "_blank" : undefined}
-                    rel={href.startsWith("http") ? "noreferrer" : undefined}
-                    className="rounded-full border border-[#40BFE5]/30 bg-white/5 p-3 text-[#40BFE5] transition-all hover:scale-110 hover:bg-[#40BFE5] hover:text-black hover:drop-shadow-[0_0_12px_rgba(64,191,229,0.8)]"
-                  >
-                    <Icon size={24} />
-                  </a>
-                ))}
-              </div>
-              <div className="border-t border-white/10 pt-6">
-                <p className="text-sm text-gray-500">
-                  © {currentYear} Imaji.lab All rights reserved.
-                </p>
-              </div>
+                Imagi.lab
+              </span>
             </div>
-          </section>
-        </main>
-      </div>
-    </div>
+            <p className="mt-12 text-sm text-white/86">
+              © {currentYear} Imagi.lab All rights reserved.
+            </p>
+          </div>
+
+          <div className="flex justify-center lg:hidden">
+            <div className="relative text-center">
+              <Image
+                src="/Footer/Footer-iBot.png"
+                alt=""
+                aria-hidden
+                width={320}
+                height={280}
+                className="mx-auto w-[14rem]"
+              />
+              <span className="mt-2 block text-[2rem] font-semibold tracking-[-0.06em] text-white">
+                iBot
+              </span>
+            </div>
+          </div>
+
+          <div className="pt-4 text-left lg:ml-auto lg:pr-2 lg:text-right">
+            <p className="text-[1.15rem] text-white">Connect With Us</p>
+            <div className="mt-4 flex items-center gap-5 lg:justify-end">
+              {footerLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  aria-label={link.label}
+                  target={link.href.startsWith("http") ? "_blank" : undefined}
+                  rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                  className="transition-transform duration-300 hover:-translate-y-0.5"
+                >
+                  <Image
+                    src={link.src}
+                    alt=""
+                    aria-hidden
+                    width={40}
+                    height={40}
+                    className="h-9 w-9 object-contain brightness-0 invert"
+                  />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
   );
 }
