@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.0](https://github.com/aysar987/Imagi.lab-Website/compare/v1.1.1...v1.2.0) (2026-03-26)
+
+
+### Features
+
+* migrate site to nextjs go monorepo ([0add84f](https://github.com/aysar987/Imagi.lab-Website/commit/0add84f357d33c35a5c95ceb1946845ad9e7e821))
+* migrate site to nextjs go monorepo ([612ea1d](https://github.com/aysar987/Imagi.lab-Website/commit/612ea1d0b95d9aff4a24dc3f27461733f2c21026))
+* revamp imagilab landing page ([c4558f5](https://github.com/aysar987/Imagi.lab-Website/commit/c4558f51bf22930d5ef41c1c7132d01e4db9fa31))
+* revamp imagilab landing page ([cfb3ae6](https://github.com/aysar987/Imagi.lab-Website/commit/cfb3ae6fcd603d07e88d494938accdeb37514896))
+
 ## [1.1.1](https://github.com/Boyeep/nextjs-go-monorepo-kit/compare/v1.1.0...v1.1.1) (2026-03-21)
 
 
